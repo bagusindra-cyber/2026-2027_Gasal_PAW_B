@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Laporan Penjualan Toko</title>
-    <!-- Memuat Chart.js dari CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
@@ -11,8 +10,6 @@
         th, td { border: 1px solid #000; padding: 8px; text-align: left; }
         .card { border: 1px solid #ccc; padding: 15px; margin-top: 20px; background: #f9f9f9; border-radius: 5px; }
         .btn { padding: 8px 12px; cursor: pointer; margin-right: 5px; margin-top: 10px; }
-        
-        /* CSS untuk menyembunyikan elemen saat dicetak */
         @media print {
             .no-print { display: none !important; }
         }
@@ -22,7 +19,6 @@
 
     <div class="no-print">
         <h2>Filter Laporan Penjualan</h2>
-        <!-- Form filter berdasarkan rentang tanggal -->
         <form method="GET">
             Mulai: <input type="date" name="tanggal_mulai" value="<?= $_GET['tanggal_mulai'] ?? '' ?>" required>
             Sampai: <input type="date" name="tanggal_selesai" value="<?= $_GET['tanggal_selesai'] ?? '' ?>" required>
@@ -40,7 +36,6 @@
     </div>
 
     <?php
-    // Koneksi ke Database db_toko
     $servername = "localhost";
     $username = "root";
     $password = "";
@@ -57,7 +52,6 @@
     $total_pendapatan = 0;
     $total_pelanggan = 0;
 
-    // Memeriksa jika tanggal disubmit
     if (!empty($_GET['tanggal_mulai']) && !empty($_GET['tanggal_selesai'])) {
         $mulai = mysqli_real_escape_string($koneksi, $_GET['tanggal_mulai']);
         $selesai = mysqli_real_escape_string($koneksi, $_GET['tanggal_selesai']);
@@ -75,8 +69,6 @@
             $data_total[] = $row['total_harian'];
             $rekap[] = $row;
         }
-
-        // 2. Query Kumulatif: Jumlah Pelanggan Unik & Total Keseluruhan
         $query_total = "SELECT COUNT(DISTINCT pelanggan_id) AS jml_pelanggan, SUM(total) AS total_semua
                         FROM transaksi
                         WHERE DATE(waktu_transaksi) BETWEEN '$mulai' AND '$selesai'";
@@ -135,7 +127,6 @@
             </tbody>
         </table>
 
-        <!-- Card Ringkasan Kumulatif -->
         <div class="card">
             <h3>Ringkasan Informasi</h3>
             <p><b>Jumlah Pelanggan Unik:</b> <?= $total_pelanggan ?> Orang</p>
